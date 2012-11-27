@@ -1,8 +1,6 @@
 var dotjs_github = {};
 
 dotjs_github.init = function() {
-	dotjs_github.$labels = $('.js-color-label-list');
-	dotjs_github.$label_container = $('.js-editable-labels-container');
 	dotjs_github.$issues = $('.issues');
 
 	var style = '<style>' +
@@ -14,27 +12,67 @@ dotjs_github.init = function() {
 		'}' +
 		'.filter-exclude .minibutton {' +
 		'  display: block;' +
+		'  text-align: center;' +
+		'}' +
+		'.filter-list li {' +
+		'  position: relative;' +
+		'}' +
+		'.filter-list .hide-it {' +
+		'  color: #bf0000;' +
+		'  font-size: 20px;' +
+		'  line-height: 20px;' +
+		'  left: -20px;' +
+		'  position: absolute;' +
+		'  top: 0px;' +
+		'}' +
+		'.filter-list .hide-it.clicked {' +
+		'  color: #ccc;' +
+		'}' +
+		'.filter-list .hide-it:hover {' +
+		'  text-decoration: none;' +
+		'}' +
+		'.issues .item.hidden {' +
+		'  display: none;' +
 		'}' +
 		'</style>';
 
 	$('body').append( style );
 
-	var $exclude = $('<div class="filter-exclude"><h4>Exclude</h4><input type="text" placeholder="Exclude labels"/><p class="clearfix"><a href="#" class="minibutton exclude-submit">Hide those mother effers</a></p></div>');
+	$('.sidebar .filter-item').live('click.dotjs_github', function( e ) {
+		e.preventDefault();
+		setTimeout( function() {
+			dotjs_github.$issues = $('.issues');
+			dotjs_github.add_hide_links();
+		}, 500 );
+	});
 
-	$exclude.appendTo( '.sidebar' );
+	dotjs_github.add_hide_links();
+};
 
-	dotjs_github.$exclude_submit = $('.filter-exclude .exclude-submit');
-	dotjs_github.$exclude = $('.filter-exclude input');
-	
-	dotjs_github.$exclude_submit.bind('click', function( e ) {
+dotjs_github.add_hide_links = function() {
+	var $labels = $('.js-color-label-list');
+	$labels.find('li').prepend('<a href="#" class="hide-it">☒</a>');
+	$labels.find('.hide-it').bind('click', function( e ) {
 		e.preventDefault();
 		e.stopPropagation();
-		var val = dotjs_github.$exclude.val();
 
-		var values = val.split(',');
-		for ( var i in values ) {
-			dotjs_github.$issues.find('.label[data-name="' + $.trim( values[ i ] ) + '"]').closest('tr').hide();
-		}
+		var $el = $(this);
+		var val = $el.next().data('label');
+		var $issues = dotjs_github.$issues.find('.list-browser-item .label[data-name="' + $.trim( val ) + '"]').closest('tr');
+
+		if ( ! $el.hasClass('clicked') ) {
+			$el.addClass('clicked');
+			$issues.addClass('hidden');
+		} else {
+			$el.removeClass('clicked');
+			$issues.removeClass('hidden');
+		}//end else
+
+		var count = $('.issues-list').find('.list-browser-item:not(.hidden)').length;
+		console.log( count );
+
+		var $selected = $('.list-browser-filter-tabs .selected');
+		$selected.html( parseInt( count, 10 ) + ' ' + $selected.data('filter') + ' issues' );
 	});
 };
 
