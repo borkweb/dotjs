@@ -18,10 +18,9 @@ dotjs_github.init = function() {
 		'  position: relative;' +
 		'}' +
 		'.filter-list .hide-it {' +
-		'  color: #bf0000;' +
 		'  font-size: 20px;' +
 		'  line-height: 20px;' +
-		'  left: -20px;' +
+		'  left: -45px;' +
 		'  position: absolute;' +
 		'  top: 0px;' +
 		'}' +
@@ -55,7 +54,7 @@ dotjs_github.init = function() {
 
 dotjs_github.add_hide_links = function() {
 	var $labels = $('.js-color-label-list');
-	$labels.find('li').prepend('<a href="#" class="hide-it">☒</a>');
+	$labels.find('li').prepend('<a href="#" class="hide-it minibutton">☠</a>');
 	$labels.find('.hide-it').bind('click', function( e ) {
 		e.preventDefault();
 		e.stopPropagation();
