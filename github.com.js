@@ -28,6 +28,10 @@ dotjs_github.init = function() {
 		'.filter-list .hide-it.clicked {' +
 		'  color: #ccc;' +
 		'}' +
+		'.filter-list .custom-hidden a:nth-child(2) {' +
+		'  text-decoration: line-through;' +
+		'  opacity: 0.3;' +
+		'}' +
 		'.filter-list .hide-it:hover {' +
 		'  text-decoration: none;' +
 		'}' +
@@ -61,15 +65,14 @@ dotjs_github.add_hide_links = function() {
 		var $issues = dotjs_github.$issues.find('.list-browser-item .label[data-name="' + $.trim( val ) + '"]').closest('tr');
 
 		if ( ! $el.hasClass('clicked') ) {
-			$el.addClass('clicked');
+			$el.addClass('clicked').closest('li').addClass('custom-hidden');
 			$issues.addClass('hidden');
 		} else {
-			$el.removeClass('clicked');
+			$el.removeClass('clicked').closest('li').removeClass('custom-hidden');
 			$issues.removeClass('hidden');
 		}//end else
 
 		var count = $('.issues-list').find('.list-browser-item:not(.hidden)').length;
-		console.log( count );
 
 		var $selected = $('.list-browser-filter-tabs .selected');
 		$selected.html( parseInt( count, 10 ) + ' ' + $selected.data('filter') + ' issues' );
