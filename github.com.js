@@ -54,7 +54,7 @@ dotjs_github.init = function() {
 
 dotjs_github.add_hide_links = function() {
 	var $labels = $('.js-color-label-list');
-	$labels.find('li').prepend('<a href="#" class="hide-it minibutton">☠</a>');
+	$labels.children('li').prepend('<a href="#" class="hide-it minibutton">☠</a>');
 	$labels.find('.hide-it').bind('click', function( e ) {
 		e.preventDefault();
 		e.stopPropagation();
