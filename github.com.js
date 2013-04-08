@@ -1,7 +1,7 @@
 var dotjs_github = {};
 
 dotjs_github.init = function() {
-	dotjs_github.$issues = $('.issues');
+	dotjs_github.$issues = $('.issue-list-group');
 
 	var style = '<style>' +
 		'.filter-exclude { margin-top: 10px; }' +
@@ -34,7 +34,7 @@ dotjs_github.init = function() {
 		'.filter-list .hide-it:hover {' +
 		'  text-decoration: none;' +
 		'}' +
-		'.issues .item.hidden {' +
+		'.issue-list-group .issue-list-item.hidden {' +
 		'  display: none;' +
 		'}' +
 		'</style>';
@@ -44,7 +44,7 @@ dotjs_github.init = function() {
 	$('.sidebar .filter-item').live('click.dotjs_github', function( e ) {
 		e.preventDefault();
 		setTimeout( function() {
-			dotjs_github.$issues = $('.issues');
+			dotjs_github.$issues = $('.issue-list-group');
 			dotjs_github.add_hide_links();
 		}, 500 );
 	});
@@ -61,7 +61,7 @@ dotjs_github.add_hide_links = function() {
 
 		var $el = $(this);
 		var val = $el.next().data('label');
-		var $issues = dotjs_github.$issues.find('.list-browser-item .label[data-name="' + $.trim( val ) + '"]').closest('tr');
+		var $issues = dotjs_github.$issues.find('.issue-list-item .label[data-name="' + $.trim( val ) + '"]').closest('li');
 
 		if ( ! $el.hasClass('clicked') ) {
 			$el.addClass('clicked').closest('li').addClass('custom-hidden');
