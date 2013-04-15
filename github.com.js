@@ -37,6 +37,13 @@ dotjs_github.init = function() {
 		'.issue-list-group .issue-list-item.hidden {' +
 		'  display: none;' +
 		'}' +
+		'.dotjs-view {' +
+		'  font-family: Helvetica, arial, freesans, clean, sans-serif;' +
+		'  font-size: 13px;' +
+		'  font-weight: normal;' +
+		'  margin-left: 10px;' +
+		'  margin-right: 0;' +
+		'}' +
 		'</style>';
 
 	$('body').append( style );
@@ -50,6 +57,7 @@ dotjs_github.init = function() {
 	});
 
 	dotjs_github.add_hide_links();
+	dotjs_github.submodule_awesome();
 };
 
 dotjs_github.add_hide_links = function() {
@@ -75,6 +83,60 @@ dotjs_github.add_hide_links = function() {
 
 		var $selected = $('.list-browser-filter-tabs .selected');
 		$selected.html( parseInt( count, 10 ) + ' ' + $selected.data('filter') + ' issues' );
+	});
+};
+
+dotjs_github.submodule_awesome = function() {
+	$('#files .file').each( function() {
+		var $el       = $(this);
+		var $info     = $el.find('.info');
+		var $diffstat = $info.find('.diffstat');
+
+		var num_lines = parseInt( $diffstat.text().substr(0,1), 10 );
+
+		if ( 2 != num_lines ) {
+			console.log('not enough lines - ' + num_lines );
+			return;
+		}//end if
+
+		var $change = $el.find('.diff-line-code');
+		var change = $change.text();
+
+		if ( ! change.match(/-Subproject/) ) {
+			console.log('not a submodule');
+			return;
+		}//end if
+
+		var submodule = $el.find('.info .js-selectable-text').text().trim();
+
+		var repo_url = 'https://github.com/';
+
+		switch ( submodule ) {
+			case 'scriblio':
+			case 'scriblio-authority':
+			case 'bcms':
+			case 'bsocial':
+				repo_url += 'misterbisson/';
+				break;
+			default:
+				repo_url += 'GigaOM/';
+		}//end switch
+
+		repo_url += submodule;
+
+		var $commits      = $change.find('.x');
+		var $prior_commit = $commits.eq(0);
+		var $new_commit   = $commits.eq(1);
+
+		var prior_hash = $prior_commit.text();
+		var new_hash   = $new_commit.text();
+
+		var diff_url = repo_url + '/compare/' + prior_hash.substr(0,7) + '...' + new_hash.substr(0, 7);
+
+		$info.find('.js-selectable-text').after('<a href="' + diff_url + '" class="dotjs-view minibutton">view diff</a> <a href="' + repo_url + '/commits/master#' + $new_commit.text() + '" class="dotjs-view minibutton">view commit stream</a>');
+
+		$prior_commit.wrap('<a href="' + repo_url + '/commit/' + prior_hash + '"/>');
+		$new_commit.wrap('<a href="' + repo_url + '/commit/' + new_hash + '"/>');
 	});
 };
 
