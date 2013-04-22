@@ -95,7 +95,6 @@ dotjs_github.submodule_awesome = function() {
 		var num_lines = parseInt( $diffstat.text().substr(0,1), 10 );
 
 		if ( 2 != num_lines ) {
-			console.log('not enough lines - ' + num_lines );
 			return;
 		}//end if
 
@@ -103,7 +102,6 @@ dotjs_github.submodule_awesome = function() {
 		var change = $change.text();
 
 		if ( ! change.match(/-Subproject/) ) {
-			console.log('not a submodule');
 			return;
 		}//end if
 
